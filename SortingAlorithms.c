@@ -123,6 +123,11 @@ void merge(int array[], int left, int mid, int right) {
   i = 0;
   j = 0;
   k = left;
+
+  // verifica nos dois subarrays ordenados iniciando pelo mesmo indicice quem é
+  // o menor dentre os dois subarrays verificados o elemento que for menor é
+  // adicionado ao array final o indíce de um array só incrementa caso o valor
+  // seja menor, o do array final sempre incrementa
   while (i < s1 && j < s2) {
     if (left_array[i] <= right_array[j]) {
       array[k] = left_array[i];
@@ -133,13 +138,13 @@ void merge(int array[], int left, int mid, int right) {
     }
     k++;
   }
-
+  // caso tenham sobrado elementos no array da esquerda, adiciona ao array final
   while (i < s1) {
     array[k] = left_array[i];
     i++;
     k++;
   }
-
+  // caso tenham sobrado elementos no array da direita, adiciona ao array final
   while (j < s2) {
     array[k] = right_array[j];
     j++;
@@ -150,16 +155,16 @@ void merge(int array[], int left, int mid, int right) {
 void merge_sort(int array[], int left, int right) {
   if (left < right) {
 
-    // finding the mid value of the array.
+    // acha o valor do meio do array
     int mid = left + (right - left) / 2;
 
-    // Calling the merge sort for the first half
+    // chama mergesort pra primeira metade (esquerda)
     merge_sort(array, left, mid);
 
-    // Calling the merge sort for the second half
+    // chama mergesort pra segunda metade (direita)
     merge_sort(array, mid + 1, right);
 
-    // Calling the merge function
+    // chama a função merge (com os subarrays já ordenados individualmente)
     merge(array, left, mid, right);
   }
 }
