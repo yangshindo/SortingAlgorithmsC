@@ -170,7 +170,7 @@ void merge_sort(int array[], int left, int right) {
 }
 
 int mergeFinal(array[], size) {
-
+  *array = malloc(2000000 * sizeof(*array)); // mallocando
   clock_t t;   // declara variável de tempo
   t = clock(); // inicia contagem
   merge_sort(array, 0,
@@ -197,7 +197,7 @@ int main(void) {
   int randArray[size]; // variável que armazena o array
   int i;
   for (i = 0; i < size; i++)
-    randArray[i] = rand() % 5; // máximo random
+    randArray[i] = rand() % RAND_MAX; // máximo random
 
   printf("\n");
   for (i = 0; i < size; i++) {
