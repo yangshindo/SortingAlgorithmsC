@@ -5,8 +5,10 @@
 
 // BUBBLE SORT
 void bubbleSort(int array[], int size) {
+
   clock_t t;   // declara variável de tempo
   t = clock(); // inicia contagem
+
   int i, j, swap;
   for (i = 0; i < size - 1; i++) {
     for (j = 0; j < size - i - 1; j++) {
@@ -17,6 +19,7 @@ void bubbleSort(int array[], int size) {
       }
     }
   }
+
   t = clock() - t;                                  // finaliza contagem
   double time_taken = ((double)t) / CLOCKS_PER_SEC; // em segundos
 
@@ -30,8 +33,10 @@ void bubbleSort(int array[], int size) {
 
 // INSERTION SORT
 void insertionSort(int array[], int size) {
+
   clock_t t;   // declara variável de tempo
   t = clock(); // inicia contagem
+
   int i, j, key;
   for (i = 1; i < size; i++) {
     key = array[i];
@@ -45,6 +50,7 @@ void insertionSort(int array[], int size) {
     }
     array[j + 1] = key;
   }
+
   t = clock() - t;                                  // finaliza contagem
   double time_taken = ((double)t) / CLOCKS_PER_SEC; // em segundos
 
@@ -57,29 +63,36 @@ void insertionSort(int array[], int size) {
 }
 
 // SELECTION SORT
-void selectionSort (int array[],int size) {
+void selectionSort(int array[], int size) {
+
   clock_t t;   // declara variável de tempo
   t = clock(); // inicia contagem
+
   int i, j, min, swap;
 
   for (i = 0; i < (size - 1); i++) {
-    // acha o elemento mínimo do array não ordenado, atribuido na variável min (mínimo)
+    // acha o elemento mínimo do array não ordenado, atribuido na variável min
+    // (mínimo)
     min = i;
-    for (j = i+1; j < size; j++) {
-      // Caso tenha algum numero menor este novo número passa a ser o novo mínimo
+    for (j = i + 1; j < size; j++) {
+      // Caso tenha algum numero menor este novo número passa a ser o novo
+      // mínimo
       if (array[j] < array[min]) {
-   min = j;
+        min = j;
       }
     }
-    //Se o minimo for diferente do primeiro numero não ordenado ele faz a troca para ordena-los
+    // Se o minimo for diferente do primeiro numero não ordenado ele faz a troca
+    // para ordena-los
     if (i != min) {
       swap = array[i];
       array[i] = array[min];
       array[min] = swap;
     }
   }
+
   t = clock() - t;                                  // finaliza contagem
   double time_taken = ((double)t) / CLOCKS_PER_SEC; // em segundos
+
   // Printa o Array
   for (i = 0; i < size; i++)
     printf("%d\n", array[i]);
@@ -91,92 +104,79 @@ void selectionSort (int array[],int size) {
 // MERGESORT ABAIXO
 
 // Combina dois sub-arrays do array principal
-// O primeiro arr[l..m] que indica a primeira metade do 0 ao centro (esquerda)
-// O segundo arr[m+1..r] que indica a segunda metade do meio + 1 ao fim
-// (direita)
-void merge(int arr[], int l, int m, int r) {
+// O primeiro left_arr[s1] que indica a primeira metade do 0 ao centro
+// (esquerda) O segundo right_arr[s2] que indica a segunda metade do meio + 1 ao
+// fim
+void merge(int array[], int left, int mid, int right) {
   int i, j, k;
-  int n1 = m - l + 1;
-  int n2 = r - m;
+  int s1 = mid - left + 1;
+  int s2 = right - mid;
 
-  // Criando arrays temporários
-  int L[n1], R[n2];
+  int left_array[s1], right_array[s2];
 
-  // Copia os dados para os errays temporários
-  // L[] e R[]
-  for (i = 0; i < n1; i++)
-    L[i] = arr[l + i];
-  for (j = 0; j < n2; j++)
-    R[j] = arr[m + 1 + j];
+  for (i = 0; i < s1; i++)
+    left_array[i] = array[left + i];
 
-  // Combina os arrays temporários arr[l..r]
+  for (j = 0; j < s2; j++)
+    right_array[j] = array[mid + 1 + j];
 
-  // Index inicial do primeiro subarray
   i = 0;
-
-  // Index inicial do segundo subarray
   j = 0;
-
-  // Index inicial do array combinado
-  k = l;
-  while (i < n1 && j < n2) {
-    if (L[i] <= R[j]) {
-      arr[k] = L[i];
+  k = left;
+  while (i < s1 && j < s2) {
+    if (left_array[i] <= right_array[j]) {
+      array[k] = left_array[i];
       i++;
     } else {
-      arr[k] = R[j];
+      array[k] = right_array[j];
       j++;
     }
     k++;
   }
 
-  // Copia os elementos que faltam de L[], se houver algum
-  while (i < n1) {
-    arr[k] = L[i];
+  while (i < s1) {
+    array[k] = left_array[i];
     i++;
     k++;
   }
 
-  // Copia os elementos que faltam de R[], se houver algum
-  while (j < n2) {
-    arr[k] = R[j];
+  while (j < s2) {
+    array[k] = right_array[j];
     j++;
     k++;
   }
 }
 
-// l é para index esquerdo (left) e r é para index direito (right)
-void mergeSort(int arr[], int l, int r) {
-  if (l < r) {
-    // Da no mesmo que (l+r)/2, mas evita overflow
-    int m = l + (r - l) / 2;
+void merge_sort(int array[], int left, int right) {
+  if (left < right) {
 
-    // Organiza a primeira e a segunda metade
-    mergeSort(arr, l, m);
-    mergeSort(arr, m + 1, r);
+    // finding the mid value of the array.
+    int mid = left + (right - left) / 2;
 
-    // Executa função acima (merge)
-    merge(arr, l, m, r);
+    // Calling the merge sort for the first half
+    merge_sort(array, left, mid);
+
+    // Calling the merge sort for the second half
+    merge_sort(array, mid + 1, right);
+
+    // Calling the merge function
+    merge(array, left, mid, right);
   }
 }
 
-// Função final
-void mergeFinal(int array[], size) {
-  clock_t t;                                 // declara variável de tempo
-  t = clock();                               // inicia contagem
-  *array = malloc(2000000 * sizeof(*array)); // mallocando
-  mergeSort(array, 0, size - 1); // executa função principal que executará as
-                                 // outras duas auxiliáres
-  t = clock() - t;                                  // finaliza contagem
+int mergeFinal(array[], size) {
+
+  clock_t t;   // declara variável de tempo
+  t = clock(); // inicia contagem
+  merge_sort(array, 0,
+             size - 1); // executa função principal que chama as outras duas
+  t = clock() - t;      // finaliza contagem
   double time_taken = ((double)t) / CLOCKS_PER_SEC; // em segundos
 
   // Printa o Array
   int i;
   for (i = 0; i < size; i++)
     printf("%d\n", array[i]);
-
-  // Printa o tempo de procesamento do sort
-  printf("\nTempo de processamento do sort: %.21f seconds\n", time_taken);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +192,7 @@ int main(void) {
   int randArray[size]; // variável que armazena o array
   int i;
   for (i = 0; i < size; i++)
-    randArray[i] = rand() % RAND_MAX; // máximo random
+    randArray[i] = rand() % 5; // máximo random
 
   printf("\n");
   for (i = 0; i < size; i++) {
