@@ -171,8 +171,8 @@ void merge_sort(int array[], int left, int right) {
 
 int mergeFinal(array[], size) {
   *array = malloc(2000000 * sizeof(*array)); // mallocando
-  clock_t t;   // declara variável de tempo
-  t = clock(); // inicia contagem
+  clock_t t;                                 // declara variável de tempo
+  t = clock();                               // inicia contagem
   merge_sort(array, 0,
              size - 1); // executa função principal que chama as outras duas
   t = clock() - t;      // finaliza contagem
@@ -182,6 +182,9 @@ int mergeFinal(array[], size) {
   int i;
   for (i = 0; i < size; i++)
     printf("%d\n", array[i]);
+
+  // Printa o tempo de procesamento do sort
+  printf("\nTempo de processamento do sort: %.21f seconds\n", time_taken);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
