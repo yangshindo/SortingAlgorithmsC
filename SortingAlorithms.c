@@ -101,7 +101,7 @@ void selectionSort(int array[], int size) {
   printf("\nTempo de processamento do sort: %.21f seconds\n", time_taken);
 }
 
-// MERGESORT ABAIXO
+// MERGE SORT
 
 // Combina dois sub-arrays do array principal
 // O primeiro left_arr[s1] que indica a primeira metade do 0 ao centro
@@ -112,7 +112,9 @@ void merge(int array[], int left, int mid, int right) {
   int s1 = mid - left + 1;
   int s2 = right - mid;
 
-  int left_array[s1], right_array[s2];
+  int *left_array, *right_array;
+  left_array = (int *)malloc(s1 * sizeof(int));
+  right_array = (int *)malloc(s2 * sizeof(int));
 
   for (i = 0; i < s1; i++)
     left_array[i] = array[left + i];
@@ -150,6 +152,8 @@ void merge(int array[], int left, int mid, int right) {
     j++;
     k++;
   }
+  free(left_array);
+  free(right_array);
 }
 
 void merge_sort(int array[], int left, int right) {
@@ -169,20 +173,93 @@ void merge_sort(int array[], int left, int right) {
   }
 }
 
-int mergeFinal(array[], size) {
-  *array = malloc(2000000 * sizeof(*array)); // mallocando
-  clock_t t;                                 // declara variável de tempo
-  t = clock();                               // inicia contagem
+void mergeFinal(int array[], int size) {
+  clock_t t;   // declara variável de tempo
+  t = clock(); // inicia contagem
   merge_sort(array, 0,
              size - 1); // executa função principal que chama as outras duas
   t = clock() - t;      // finaliza contagem
   double time_taken = ((double)t) / CLOCKS_PER_SEC; // em segundos
 
   // Printa o Array
-  int i;
-  for (i = 0; i < size; i++)
-    printf("%d\n", array[i]);
+  // int i;
+  // for (i = 0; i < size; i++)
+  //  printf("%d\n", array[i]);
+  // Printa o tempo de procesamento do sort
+  printf("\nTempo de processamento do sort: %.21f seconds\n", time_taken);
+}
 
+// QUICK SORT
+
+// Função swap entre dois elementos
+void swap(int array[], int i, int j) {
+  int swap = array[i];
+  array[i] = array[j];
+  array[j] = swap;
+}
+
+// Particionando (retorna índice do pivô)
+int partition(int array[], int left, int right) {
+  int pivot, pivot_index, i;
+
+  pivot = array[right]; // o pivô é sempre o último elemento
+  pivot_index = left;
+
+  for (i = left; i < right; i++) {
+    // verifica se o elemento é <= ao pivô
+    if (array[i] <= pivot) {
+      // troca
+      swap(array, i, pivot_index);
+      // incrementa o índice do pivot
+      pivot_index++;
+    }
+  }
+
+  // troca o pivô
+  swap(array, pivot_index, right);
+
+  // retorna o índice do pivô
+  return pivot_index;
+}
+
+// Pivô randômico para evitar pior caso
+int random_partition(int array[], int left, int right) {
+  // seleciona um número entre fim e início
+  int pivot_index = (rand() % (right - left + 1)) + left;
+
+  // faz a troca para colocar o pivô no fim
+  swap(array, pivot_index, right);
+
+  // chama função partition
+  return partition(array, left, right);
+}
+
+void quick_sort(int array[], int left, int right) {
+  if (left < right) {
+    // chama função random partition e retorna o índice do pivô
+    int pivot_index = random_partition(array, left, right);
+
+    // chamadas recursivas
+    quick_sort(array, left, pivot_index - 1);
+    quick_sort(array, pivot_index + 1, right);
+  }
+}
+
+void quickFinal(int array[], int size) {
+  clock_t t;                      // declara variável de tempo
+  t = clock();                    // inicia contagem
+  srand(time(NULL));              // random seed
+  quick_sort(array, 0, size - 1); // chamada do quicksort
+  t = clock() - t;                // finaliza contagem
+  double time_taken = ((double)t) / CLOCKS_PER_SEC; // em segundos
+
+  /*
+  Printa o Array
+  int i;
+  printf("\n");
+  for (i = 0; i < size; i++) {
+    printf("%d \n", array[i]);}
+  */
   // Printa o tempo de procesamento do sort
   printf("\nTempo de processamento do sort: %.21f seconds\n", time_taken);
 }
@@ -197,20 +274,25 @@ int main(void) {
   printf("Qual o tamanho do array de números aleatórios que você deseja gerar? "
          "(máximo 1 milhão)?\n\n");
   scanf("%d", &size);
-  int randArray[size]; // variável que armazena o array
+  int *randArray;
+  randArray = (int *)malloc(size * sizeof(int)); // mallocando;
+
   int i;
   for (i = 0; i < size; i++)
     randArray[i] = rand() % RAND_MAX; // máximo random
 
+  // Printa o Array
+  /*
   printf("\n");
-  for (i = 0; i < size; i++) {
+  for (i = 0; i < size; i++) {11
     printf("%d \n", randArray[i]);
   }
+  */
 
   int sortMethod;
   printf(
       "\n Informe qual o método a ser utilizado:\n 1- Bubble\n 2 -Insertion \n "
-      "3- Selecion\n 4- Merge\n 0- Sair \n\n");
+      "3- Selecion\n 4- Merge\n 5- Quick \n 0- Sair \n\n");
   scanf("%d", &sortMethod);
 
   int repeat; // boolean para repetir ou não o mesmo sort method
@@ -249,6 +331,15 @@ int main(void) {
     scanf("%d", &repeat);
     if (repeat == 1) {
       mergeFinal(randArray, size);
+    } else {
+      break;
+    }
+  case 5:
+    quickFinal(randArray, size);
+    printf("Repetir?\n1- Sim\n2- Não\n");
+    scanf("%d", &repeat);
+    if (repeat == 1) {
+      quickFinal(randArray, size);
     } else {
       break;
     }
